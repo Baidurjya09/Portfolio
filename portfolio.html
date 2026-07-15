@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Baidurjya Bastav Hazarika — AI/ML Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<style>
+:root{
+  --ink:#0b0d10;
+  --ink-2:#111418;
+  --paper:#ede8de;
+  --crimson:#ff2e3e;
+  --cyan:#00e5ff;
+  --yellow:#ffd400;
+  --line: rgba(237,232,222,0.14);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--ink);
+  color:var(--paper);
+  font-family:'Space Grotesk',sans-serif;
+  overflow-x:hidden;
+  cursor:none;
+}
+::selection{background:var(--crimson);color:var(--ink);}
+
+/* ---------- texture layers ---------- */
+.grain{
+  position:fixed;inset:0;pointer-events:none;z-index:998;opacity:0.05;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.scanlines{
+  position:fixed;inset:0;pointer-events:none;z-index:997;
+  background:repeating-linear-gradient(to bottom, rgba(0,0,0,0.0) 0px, rgba(0,0,0,0.0) 2px, rgba(0,0,0,0.12) 3px, rgba(0,0,0,0.0) 4px);
+  opacity:0.35;
+}
+.halftone{
+  position:absolute;inset:0;pointer-events:none;
+  background-image:radial-gradient(rgba(237,232,222,0.09) 1px, transparent 1.4px);
+  background-size:6px 6px;
+  mask-image:radial-gradient(ellipse 70% 60% at 50% 40%, black 0%, transparent 75%);
+}
+
+/* ---------- cursor reticle ---------- */
+#reticle{
+  position:fixed;top:0;left:0;width:26px;height:26px;border:1.5px solid var(--crimson);
+  border-radius:2px;pointer-events:none;z-index:9999;transform:translate(-50%,-50%) rotate(45deg);
+  transition:width .25s, height .25s, border-color .25s, background .25s;
+  mix-blend-mode:difference;
+}
+#reticle::before,#reticle::after{
+  content:'';position:absolute;background:var(--crimson);
+}
+#reticle::before{top:-6px;left:11px;width:1.5px;height:6px;}
+#reticle::after{bottom:-6px;left:11px;width:1.5px;height:6px;}
+#reticle.lock{width:64px;height:64px;border-color:var(--cyan);background:rgba(0,229,255,0.06);}
+#dot{position:fixed;top:0;left:0;width:4px;height:4px;background:var(--paper);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);}
+@media (max-width:900px){#reticle,#dot{display:none;}body{cursor:auto;}}
+
+/* ---------- layout helpers ---------- */
+.wrap{max-width:1240px;margin:0 auto;padding:0 32px;}
+section{position:relative;}
+.eyebrow{
+  font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--cyan);
+  display:flex;align-items:center;gap:10px;margin-bottom:18px;
+}
+.eyebrow::before{content:'';width:22px;height:1px;background:var(--cyan);}
+
+/* ---------- nav ---------- */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:500;display:flex;align-items:center;justify-content:space-between;
+  padding:22px 32px;mix-blend-mode:difference;
+}
+.logo{font-family:'Anton',sans-serif;font-size:20px;letter-spacing:.04em;}
+.logo span{color:var(--crimson);}
+.navlinks{display:flex;gap:34px;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;}
+.navlinks a{color:var(--paper);text-decoration:none;position:relative;}
+.navlinks a::after{content:'';position:absolute;left:0;bottom:-4px;width:0;height:1px;background:var(--crimson);transition:width .3s;}
+.navlinks a:hover::after{width:100%;}
+@media (max-width:700px){.navlinks{display:none;}}
+
+/* ---------- HUD corner coords ---------- */
+.hud-corner{
+  position:fixed;bottom:22px;left:32px;z-index:400;font-family:'JetBrains Mono',monospace;font-size:11px;
+  color:rgba(237,232,222,.5);letter-spacing:.08em;display:flex;flex-direction:column;gap:2px;
+}
+.hud-corner span{color:var(--crimson);}
+@media (max-width:700px){.hud-corner{display:none;}}
+
+/* ---------- hero ---------- */
+.hero{
+  min-height:100vh;display:flex;flex-direction:column;justify-content:center;position:relative;
+  padding-top:90px;overflow:hidden;
+}
+.hero .halftone{opacity:.7;}
+.hero-title{
+  font-family:'Anton',sans-serif;text-transform:uppercase;line-height:.86;
+  font-size:clamp(52px,11vw,158px);letter-spacing:.005em;position:relative;z-index:2;
+}
+.hero-title .line{display:block;overflow:hidden;}
+.hero-title .line span{display:inline-block;will-change:transform;}
+.hero-title .accent{color:var(--crimson);}
+.hero-sub{
+  font-family:'JetBrains Mono',monospace;font-size:clamp(12px,1.6vw,15px);letter-spacing:.18em;text-transform:uppercase;
+  color:var(--cyan);margin-top:26px;display:flex;gap:16px;align-items:center;flex-wrap:wrap;position:relative;z-index:2;
+}
+.hero-sub .sep{color:var(--crimson);}
+.hero-bio{
+  max-width:560px;margin-top:28px;font-size:16px;line-height:1.7;color:rgba(237,232,222,.78);position:relative;z-index:2;
+}
+.hero-cta{display:flex;gap:18px;margin-top:44px;position:relative;z-index:2;flex-wrap:wrap;}
+.btn{
+  font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.16em;text-transform:uppercase;
+  padding:16px 30px;border:1px solid var(--paper);background:transparent;color:var(--paper);text-decoration:none;
+  position:relative;overflow:hidden;display:inline-block;
+}
+.btn span{position:relative;z-index:2;}
+.btn::before{content:'';position:absolute;inset:0;background:var(--crimson);transform:translateY(101%);transition:transform .35s cubic-bezier(.7,0,.3,1);z-index:1;}
+.btn:hover::before{transform:translateY(0);}
+.btn:hover{border-color:var(--crimson);color:var(--ink);}
+.btn.solid{background:var(--crimson);border-color:var(--crimson);color:var(--ink);}
+.btn.solid::before{background:var(--paper);}
+.btn.solid:hover{color:var(--ink);}
+
+.speedlines{
+  position:absolute;top:0;right:-10%;width:70%;height:100%;z-index:1;pointer-events:none;opacity:.5;
+  background:repeating-linear-gradient(100deg, transparent 0 18px, rgba(255,46,62,0.06) 18px 19px, transparent 19px 46px, rgba(0,229,255,0.05) 46px 47px);
+}
+
+/* ---------- marquee ---------- */
+.marquee-strip{
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:16px 0;overflow:hidden;background:var(--ink-2);
+}
+.marquee-track{display:flex;white-space:nowrap;width:max-content;}
+.marquee-track span{
+  font-family:'JetBrains Mono',monospace;font-size:14px;letter-spacing:.1em;text-transform:uppercase;padding-right:40px;
+  color:rgba(237,232,222,.55);
+}
+.marquee-track span.hi{color:var(--crimson);}
+
+/* ---------- section title ---------- */
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:24px;margin-bottom:56px;flex-wrap:wrap;}
+.sec-title{font-family:'Anton',sans-serif;text-transform:uppercase;font-size:clamp(34px,6vw,72px);line-height:.95;}
+.sec-num{font-family:'JetBrains Mono',monospace;font-size:13px;color:rgba(237,232,222,.4);}
+
+/* ---------- profile ---------- */
+.profile{padding:150px 0 110px;}
+.profile-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:70px;align-items:start;}
+@media (max-width:850px){.profile-grid{grid-template-columns:1fr;gap:44px;}}
+.profile-text p{font-size:18px;line-height:1.85;color:rgba(237,232,222,.82);margin-bottom:20px;}
+.profile-text strong{color:var(--paper);font-weight:600;}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);}
+.stat{background:var(--ink);padding:26px 24px;}
+.stat b{font-family:'Anton',sans-serif;font-size:34px;color:var(--crimson);display:block;}
+.stat span{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:rgba(237,232,222,.55);}
+
+/* ---------- arsenal / skills ---------- */
+.arsenal{padding:110px 0;background:var(--ink-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+.arsenal-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:40px 60px;}
+@media (max-width:750px){.arsenal-grid{grid-template-columns:1fr;}}
+.arsenal-cat{border-left:1px solid var(--line);padding-left:22px;}
+.arsenal-cat h4{
+  font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:16px;
+}
+.chip-row{display:flex;flex-wrap:wrap;gap:10px;}
+.chip{
+  font-family:'JetBrains Mono',monospace;font-size:12.5px;padding:8px 14px;border:1px solid var(--line);color:rgba(237,232,222,.85);
+  transition:border-color .25s, color .25s;
+}
+.chip:hover{border-color:var(--crimson);color:var(--paper);}
+
+/* ---------- missions / projects ---------- */
+.missions{padding:130px 0;}
+.mission{
+  border-top:1px solid var(--line);padding:48px 0;display:grid;grid-template-columns:110px 1fr 1fr;gap:36px;
+  position:relative;overflow:hidden;
+}
+.mission:last-child{border-bottom:1px solid var(--line);}
+@media (max-width:900px){.mission{grid-template-columns:70px 1fr;}}
+.m-file{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--crimson);letter-spacing:.08em;padding-top:6px;}
+.m-main h3{
+  font-family:'Anton',sans-serif;text-transform:uppercase;font-size:clamp(24px,3.4vw,38px);line-height:1.02;margin-bottom:14px;
+}
+.m-main .tagline{color:rgba(237,232,222,.6);font-size:14px;margin-bottom:18px;font-family:'JetBrains Mono',monospace;letter-spacing:.02em;}
+.m-main .tags{display:flex;flex-wrap:wrap;gap:8px;}
+.m-main .tags span{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--cyan);border:1px solid rgba(0,229,255,.28);padding:5px 10px;}
+.m-detail{align-self:start;}
+.m-detail ul{list-style:none;}
+.m-detail li{
+  font-size:15px;line-height:1.65;color:rgba(237,232,222,.78);padding-left:18px;position:relative;margin-bottom:10px;
+}
+.m-detail li::before{content:'—';position:absolute;left:0;color:var(--crimson);}
+@media (max-width:900px){.m-detail{grid-column:2/3;}}
+
+/* ---------- logs / experience ---------- */
+.logs{padding:110px 0;background:var(--ink-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+.log-item{display:grid;grid-template-columns:170px 1fr;gap:36px;padding:36px 0;border-bottom:1px solid var(--line);}
+.log-item:first-child{border-top:1px solid var(--line);}
+@media (max-width:750px){.log-item{grid-template-columns:1fr;gap:10px;}}
+.log-date{font-family:'JetBrains Mono',monospace;font-size:12px;color:rgba(237,232,222,.5);letter-spacing:.06em;padding-top:4px;}
+.log-role h4{font-family:'Anton',sans-serif;text-transform:uppercase;font-size:22px;margin-bottom:4px;}
+.log-role .org{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--crimson);margin-bottom:14px;display:block;}
+.log-role ul{list-style:none;}
+.log-role li{font-size:14.5px;line-height:1.6;color:rgba(237,232,222,.78);padding-left:16px;position:relative;margin-bottom:6px;}
+.log-role li::before{content:'▸';position:absolute;left:0;color:var(--cyan);font-size:11px;top:3px;}
+
+/* ---------- education + certs ---------- */
+.edu{padding:110px 0;}
+.edu-grid{display:grid;grid-template-columns:1fr 1fr;gap:70px;}
+@media (max-width:850px){.edu-grid{grid-template-columns:1fr;gap:50px;}}
+.edu-row{display:flex;justify-content:space-between;gap:16px;padding:18px 0;border-bottom:1px solid var(--line);font-family:'JetBrains Mono',monospace;font-size:13px;}
+.edu-row .deg{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:15px;color:var(--paper);}
+.edu-row .inst{color:rgba(237,232,222,.55);font-size:12px;margin-top:3px;}
+.edu-row .score{color:var(--crimson);white-space:nowrap;}
+.cert-list{list-style:none;}
+.cert-list li{
+  font-family:'JetBrains Mono',monospace;font-size:13px;padding:16px 0;border-bottom:1px solid var(--line);
+  display:flex;justify-content:space-between;color:rgba(237,232,222,.78);gap:12px;
+}
+.cert-list li span{color:var(--cyan);font-size:11px;letter-spacing:.06em;white-space:nowrap;}
+
+/* ---------- transmission / contact ---------- */
+.transmission{
+  padding:160px 0 90px;text-align:center;position:relative;
+}
+.transmission .halftone{opacity:.5;}
+.t-title{
+  font-family:'Anton',sans-serif;text-transform:uppercase;font-size:clamp(40px,9vw,110px);line-height:.92;position:relative;z-index:2;
+}
+.t-title .accent{color:var(--crimson);}
+.t-sub{
+  font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:rgba(237,232,222,.6);
+  margin:26px auto 46px;max-width:480px;position:relative;z-index:2;
+}
+.t-links{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;position:relative;z-index:2;}
+footer{
+  padding:30px 32px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);
+  font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(237,232,222,.4);letter-spacing:.08em;flex-wrap:wrap;gap:10px;
+}
+footer a{color:rgba(237,232,222,.4);text-decoration:none;}
+footer a:hover{color:var(--crimson);}
+
+.reveal{opacity:0;transform:translateY(40px);}
+</style>
+</head>
+<body>
+
+<div id="reticle"></div>
+<div id="dot"></div>
+<div class="grain"></div>
+<div class="scanlines"></div>
+
+<nav>
+  <div class="logo">B<span>.</span>BH</div>
+  <div class="navlinks">
+    <a href="#profile">Profile</a>
+    <a href="#arsenal">Arsenal</a>
+    <a href="#missions">Missions</a>
+    <a href="#logs">Logs</a>
+    <a href="#transmission">Transmit</a>
+  </div>
+</nav>
+
+<div class="hud-corner">
+  <div>GUWAHATI, IN <span>// 26.14°N</span></div>
+  <div>STATUS <span>// AVAILABLE</span></div>
+  <div id="clock">00:00:00 IST</div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="halftone"></div>
+  <div class="speedlines"></div>
+  <div class="wrap">
+    <div class="eyebrow">FILE_000 // OPERATOR PROFILE</div>
+    <h1 class="hero-title">
+      <span class="line"><span>BAIDURJYA</span></span>
+      <span class="line"><span class="accent">BASTAV HAZARIKA</span></span>
+    </h1>
+    <div class="hero-sub">
+      <span>AI/ML ENGINEER</span><span class="sep">//</span><span>FULL-STACK DEVELOPER</span><span class="sep">//</span><span>エンジニア</span>
+    </div>
+    <p class="hero-bio">
+      BCA student at Assam Don Bosco University building production-grade AI systems — from civic governance
+      simulations to emergency-response assistants. Solo hackathon finalist among 52,000+ developers. Currently
+      shipping frontend at Streak Remote.
+    </p>
+    <div class="hero-cta">
+      <a href="#missions" class="btn solid"><span>View Missions</span></a>
+      <a href="#transmission" class="btn"><span>Transmit Signal</span></a>
+    </div>
+  </div>
+</section>
+
+<div class="marquee-strip">
+  <div class="marquee-track" id="marquee">
+    <span>LLMs</span><span class="hi">//</span><span>PYTORCH</span><span class="hi">//</span><span>REACTJS</span><span class="hi">//</span>
+    <span>FASTAPI</span><span class="hi">//</span><span>RAG</span><span class="hi">//</span><span>PROMPT ENGINEERING</span><span class="hi">//</span>
+    <span>REACT NATIVE</span><span class="hi">//</span><span>CIVIC TECH</span><span class="hi">//</span><span>開発者</span><span class="hi">//</span>
+  </div>
+</div>
+
+<!-- PROFILE -->
+<section class="profile" id="profile">
+  <div class="wrap">
+    <div class="eyebrow">FILE_001 // PROFILE</div>
+    <div class="profile-grid">
+      <div class="profile-text reveal">
+        <p>I build <strong>AI systems that ship</strong> — not demos. My work spans multi-agent civic simulations,
+        emergency-response assistants with RAG pipelines, and disease-prediction tools, alongside production
+        frontend work in ReactJS and React Native.</p>
+        <p>Outside of coursework, I run a small digital marketing practice serving local clients across Guwahati
+        and Northeast India, managing Google and Meta ad campaigns — which keeps my product instincts grounded
+        in real users, not just leaderboards.</p>
+        <p>I move fast from idea to working deliverable, and I'm currently looking for <strong>AI/ML and full-stack
+        roles</strong> where that speed matters.</p>
+      </div>
+      <div class="stat-grid reveal">
+        <div class="stat"><b>7.45</b><span>CGPA / BCA · ADBU</span></div>
+        <div class="stat"><b>TOP 0.1%</b><span>Meta × PyTorch Hackathon</span></div>
+        <div class="stat"><b>4</b><span>Production AI Systems Shipped</span></div>
+        <div class="stat"><b>100+</b><span>Leads Generated · Nefinex</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ARSENAL -->
+<section class="arsenal" id="arsenal">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div><div class="eyebrow">FILE_002 // ARSENAL</div><h2 class="sec-title">Skills &amp; Tools</h2></div>
+      <div class="sec-num">05 CATEGORIES</div>
+    </div>
+    <div class="arsenal-grid">
+      <div class="arsenal-cat reveal">
+        <h4>AI / ML</h4>
+        <div class="chip-row">
+          <div class="chip">Large Language Models</div><div class="chip">NLP</div><div class="chip">Prompt Engineering</div>
+          <div class="chip">Reinforcement Learning</div><div class="chip">PyTorch</div><div class="chip">RAG / ChromaDB</div>
+        </div>
+      </div>
+      <div class="arsenal-cat reveal">
+        <h4>Web Development</h4>
+        <div class="chip-row">
+          <div class="chip">ReactJS</div><div class="chip">React Native</div><div class="chip">TypeScript</div>
+          <div class="chip">FastAPI</div><div class="chip">REST APIs</div><div class="chip">Responsive Design</div>
+        </div>
+      </div>
+      <div class="arsenal-cat reveal">
+        <h4>Languages</h4>
+        <div class="chip-row">
+          <div class="chip">Python</div><div class="chip">JavaScript</div><div class="chip">Java</div>
+          <div class="chip">C++</div><div class="chip">C</div><div class="chip">HTML / CSS</div>
+        </div>
+      </div>
+      <div class="arsenal-cat reveal">
+        <h4>Databases &amp; Tools</h4>
+        <div class="chip-row">
+          <div class="chip">MongoDB</div><div class="chip">MySQL</div><div class="chip">Firebase</div>
+          <div class="chip">Docker</div><div class="chip">Git / GitHub</div><div class="chip">VS Code</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MISSIONS -->
+<section class="missions" id="missions">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div><div class="eyebrow">FILE_003 // MISSIONS</div><h2 class="sec-title">Selected Projects</h2></div>
+      <div class="sec-num">04 FILES DECLASSIFIED</div>
+    </div>
+
+    <div class="mission reveal">
+      <div class="m-file">FILE<br>01</div>
+      <div class="m-main">
+        <h3>CivicMind</h3>
+        <div class="tagline">Multi-agent civic governance simulation — Meta × PyTorch × OpenEnv Hackathon (Solo Finalist)</div>
+        <div class="tags"><span>PyTorch</span><span>LLM Agents</span><span>FastAPI</span><span>Streamlit</span></div>
+      </div>
+      <div class="m-detail">
+        <ul>
+          <li>Simulated 10,000 virtual citizens over a 52-week timeline with six specialized government AI agents</li>
+          <li>Designed prompt-engineering workflows and a PyTorch composite reward model for agent decisions</li>
+          <li>Shipped a FastAPI backend, Streamlit dashboard, and Colab training notebook</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mission reveal">
+      <div class="m-file">FILE<br>02</div>
+      <div class="m-main">
+        <h3>GORMODE-A</h3>
+        <div class="tagline">Guardian AI for real-time risk &amp; emergency response</div>
+        <div class="tags"><span>RAG</span><span>ChromaDB</span><span>FastAPI</span><span>ReactJS</span><span>Docker</span></div>
+      </div>
+      <div class="m-detail">
+        <ul>
+          <li>Dual-mode classification with 3-tier risk assessment and automatic SOS escalation</li>
+          <li>Retrieval-augmented generation over Indian legal knowledge for context-aware safety guidance</li>
+          <li>Full-stack build with GPS-based emergency workflows and scalable AI inference</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mission reveal">
+      <div class="m-file">FILE<br>03</div>
+      <div class="m-main">
+        <h3>AI Hiring Assistant</h3>
+        <div class="tagline">OpenEnv-compliant recruitment evaluation platform for LLM agents</div>
+        <div class="tags"><span>OpenEnv</span><span>Pydantic</span><span>Docker</span><span>HuggingFace</span></div>
+      </div>
+      <div class="m-detail">
+        <ul>
+          <li>Simulated technical recruitment across IT, Management, Marketing, and Business domains</li>
+          <li>Deterministic candidate evaluation via an F1-score based grading system</li>
+          <li>Modular schema design with OpenAI / Hugging Face-compatible API integration</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mission reveal">
+      <div class="m-file">FILE<br>04</div>
+      <div class="m-main">
+        <h3>Multi-Disease Detection</h3>
+        <div class="tagline">Symptom-based disease prediction with risk scoring</div>
+        <div class="tags"><span>ReactJS</span><span>Flask</span><span>ML Models</span></div>
+      </div>
+      <div class="m-detail">
+        <ul>
+          <li>Trained ML models to predict likely conditions from symptom and health-indicator datasets</li>
+          <li>Built a risk-scoring system to communicate prediction confidence</li>
+          <li>Shipped a responsive ReactJS frontend on a Flask backend</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- LOGS -->
+<section class="logs" id="logs">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div><div class="eyebrow">FILE_004 // ACTIVITY LOGS</div><h2 class="sec-title">Experience</h2></div>
+      <div class="sec-num">02 ENTRIES</div>
+    </div>
+
+    <div class="log-item reveal">
+      <div class="log-date">DEC 2024 — PRESENT</div>
+      <div class="log-role">
+        <h4>Frontend Developer <span style="color:rgba(237,232,222,.5);font-family:'JetBrains Mono',monospace;font-size:12px;">(Part-Time)</span></h4>
+        <span class="org">Streak Remote</span>
+        <ul>
+          <li>Build responsive web and mobile interfaces with ReactJS, React Native, and TypeScript</li>
+          <li>Develop reusable UI components and scalable frontend architectures for cross-platform apps</li>
+          <li>Integrate REST APIs alongside designers and backend developers to ship production-ready features</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="log-item reveal">
+      <div class="log-date">JUN 2025 — JUL 2025</div>
+      <div class="log-role">
+        <h4>Software Development &amp; Business Operations Intern</h4>
+        <span class="org">Nefinex Pvt. Ltd., Guwahati</span>
+        <ul>
+          <li>Managed ATS workflows for 50+ candidates, improving onboarding efficiency by 30%</li>
+          <li>Analyzed campaign performance via Meta Business Suite and Google Business tools</li>
+          <li>Generated 100+ leads and contributed to frontend/backend workflow optimization</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EDUCATION + CERTS -->
+<section class="edu" id="education">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div><div class="eyebrow">FILE_005 // RECORDS</div><h2 class="sec-title">Education &amp; Certs</h2></div>
+    </div>
+    <div class="edu-grid">
+      <div class="reveal">
+        <div class="edu-row">
+          <div><div class="deg">Bachelor of Computer Application</div><div class="inst">Assam Don Bosco University, Azara · 2023–26</div></div>
+          <div class="score">7.45 CGPA</div>
+        </div>
+        <div class="edu-row">
+          <div><div class="deg">Higher Secondary (SEBA)</div><div class="inst">Pragjyotika Sr. Sec. School, Titabor · 2023</div></div>
+          <div class="score">69%</div>
+        </div>
+        <div class="edu-row">
+          <div><div class="deg">HSLC (SEBA)</div><div class="inst">Kristo Jyoti High School, Bokakhat · 2021</div></div>
+          <div class="score">77%</div>
+        </div>
+      </div>
+      <div class="reveal">
+        <ul class="cert-list">
+          <li>Meta × PyTorch OpenEnv Hackathon x Scaler (Solo) <span>FINALIST</span></li>
+          <li>Introduction to Internet of Things <span>NPTEL</span></li>
+          <li>Diploma in Computer Application <span>STP COMPUTER EDUCATION</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRANSMISSION -->
+<section class="transmission" id="transmission">
+  <div class="halftone"></div>
+  <div class="wrap">
+    <div class="eyebrow" style="justify-content:center;">FILE_006 // OPEN CHANNEL</div>
+    <h2 class="t-title">Let's Build <span class="accent">Something</span></h2>
+    <p class="t-sub">Open to AI/ML and full-stack roles, freelance builds, and hackathon teams.</p>
+    <div class="t-links">
+      <a class="btn solid" href="mailto:baidujyabastavhazarika@gmail.com"><span>Email</span></a>
+      <a class="btn" href="#" data-label="github"><span>GitHub</span></a>
+      <a class="btn" href="#" data-label="linkedin"><span>LinkedIn</span></a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div>© 2026 BAIDURJYA BASTAV HAZARIKA</div>
+  <div>BUILT WITH REACT SENSIBILITY &amp; MANGA INK</div>
+  <div>GUWAHATI, ASSAM</div>
+</footer>
+
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+/* cursor reticle */
+const reticle=document.getElementById('reticle');
+const dot=document.getElementById('dot');
+window.addEventListener('mousemove', e=>{
+  gsap.to(reticle,{x:e.clientX,y:e.clientY,duration:.35,ease:'power3.out'});
+  gsap.to(dot,{x:e.clientX,y:e.clientY,duration:.08});
+});
+document.querySelectorAll('a,.chip,.mission').forEach(el=>{
+  el.addEventListener('mouseenter',()=>reticle.classList.add('lock'));
+  el.addEventListener('mouseleave',()=>reticle.classList.remove('lock'));
+});
+
+/* hero title reveal */
+gsap.set('.hero-title .line span',{yPercent:110});
+gsap.timeline({delay:.15})
+  .to('.hero-title .line span',{yPercent:0,duration:1.1,stagger:.12,ease:'expo.out'})
+  .from('.hero-sub',{opacity:0,y:14,duration:.6},'-=0.5')
+  .from('.hero-bio',{opacity:0,y:14,duration:.6},'-=0.4')
+  .from('.hero-cta',{opacity:0,y:14,duration:.6},'-=0.4');
+
+/* scroll reveals */
+document.querySelectorAll('.reveal').forEach(el=>{
+  gsap.to(el,{
+    opacity:1,y:0,duration:.9,ease:'power3.out',
+    scrollTrigger:{trigger:el,start:'top 85%'}
+  });
+});
+
+/* mission rows: slide-in like manga panel cut */
+document.querySelectorAll('.mission').forEach((el,i)=>{
+  gsap.fromTo(el,{clipPath:'inset(0 0 0 100%)'},{
+    clipPath:'inset(0 0 0 0%)',duration:.9,ease:'power4.out',
+    scrollTrigger:{trigger:el,start:'top 88%'}
+  });
+});
+
+/* marquee infinite scroll */
+const track=document.getElementById('marquee');
+track.innerHTML+=track.innerHTML;
+gsap.to(track,{xPercent:-50,duration:22,ease:'linear',repeat:-1});
+
+/* clock */
+function tick(){
+  const d=new Date();
+  const opts={timeZone:'Asia/Kolkata',hour12:false,hour:'2-digit',minute:'2-digit',second:'2-digit'};
+  document.getElementById('clock').textContent=d.toLocaleTimeString('en-GB',opts)+' IST';
+}
+tick();setInterval(tick,1000);
+
+/* magnetic buttons */
+document.querySelectorAll('.btn').forEach(btn=>{
+  btn.addEventListener('mousemove',e=>{
+    const r=btn.getBoundingClientRect();
+    const x=e.clientX-r.left-r.width/2, y=e.clientY-r.top-r.height/2;
+    gsap.to(btn,{x:x*.25,y:y*.4,duration:.3,ease:'power2.out'});
+  });
+  btn.addEventListener('mouseleave',()=>gsap.to(btn,{x:0,y:0,duration:.4,ease:'elastic.out(1,0.4)'}));
+});
+</script>
+</body>
+</html>
