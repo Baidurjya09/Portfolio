@@ -3,7 +3,7 @@ User-agent: *
 Allow: /
 
 # Sitemap location
-Sitemap: https://jack3d.com/sitemap.xml
+Sitemap: https://baidurjyabastavhazarika.netlify.app/sitemap.xml
 
 # Crawl-delay for polite bots
 Crawl-delay: 10
