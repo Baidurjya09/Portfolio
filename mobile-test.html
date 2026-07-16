@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mobile Testing - Portfolio</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    padding: 20px;
+    background: #0b0d10;
+    color: #ede8de;
+  }
+  .container { max-width: 800px; margin: 0 auto; }
+  h1 { margin-bottom: 20px; color: #ff2e3e; }
+  .test-section {
+    background: #111418;
+    border: 1px solid rgba(237,232,222,0.14);
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+  }
+  .test-section h2 {
+    font-size: 18px;
+    margin-bottom: 12px;
+    color: #00e5ff;
+  }
+  .test-item {
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(237,232,222,0.1);
+  }
+  .test-item:last-child { border-bottom: none; }
+  .label { font-weight: 600; color: #00e5ff; }
+  .value { color: #ede8de; margin-top: 4px; }
+  .status {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+  }
+  .status.pass { background: #00e5ff; color: #0b0d10; }
+  .status.fail { background: #ff2e3e; color: #fff; }
+  .status.warning { background: #ffd400; color: #0b0d10; }
+  button {
+    background: #ff2e3e;
+    color: #fff;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    margin: 10px 10px 10px 0;
+    font-weight: bold;
+  }
+  button:active { transform: scale(0.98); }
+  .code {
+    background: rgba(0,229,255,0.1);
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: monospace;
+    font-size: 13px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>📱 Mobile Optimization Test</h1>
+  
+  <div class="test-section">
+    <h2>🖥️ Viewport Information</h2>
+    <div class="test-item">
+      <div class="label">Screen Size</div>
+      <div class="value"><span id="screen-size"></span></div>
+    </div>
+    <div class="test-item">
+      <div class="label">Viewport Size</div>
+      <div class="value"><span id="viewport-size"></span></div>
+    </div>
+    <div class="test-item">
+      <div class="label">Device Pixel Ratio</div>
+      <div class="value"><span id="pixel-ratio"></span></div>
+    </div>
+    <div class="test-item">
+      <div class="label">Orientation</div>
+      <div class="value"><span id="orientation"></span></div>
+    </div>
+    <div class="test-item">
+      <div class="label">Device Type</div>
+      <div class="value"><span id="device-type"></span></div>
+    </div>
+  </div>
+
+  <div class="test-section">
+    <h2>✅ Feature Detection</h2>
+    <div class="test-item">
+      <div class="label">Touch Support</div>
+      <div class="value"><span id="touch-support"></span></div>
+    </div>
+    <div class="test-item">
+      <div class="label">Service Worker</div>
+      <div class="value"><span id="service-worker"></span></div>
+    </div>
+    <div class="test-item">
+      <div class="label">PWA Installable</div>
+      <div class="value"><span id="pwa-installable"></span></div>
+    </div>
+    <div class="test-item">
+      <div class="label">Offline Support</div>
+      <div class="value"><span id="offline-support"></span></div>
+    </div>
+    <div class="test-item">
+      <div class="label">Local Storage</div>
+      <div class="value"><span id="local-storage"></span></div>
+    </div>
+    <div class="test-item">
+      <div class="label">IndexedDB</div>
+      <div class="value"><span id="indexed-db"></span></div>
+    </div>
+  </div>
+
+  <div class="test-section">
+    <h2>🌐 Network Information</h2>
+    <div class="test-item">
+      <div class="label">Connection Type</div>
+      <div class="value"><span id="connection-type"></span></div>
+    </div>
+    <div class="test-item">
+      <div class="label">Effective Type</div>
+      <div class="value"><span id="effective-type"></span></div>
+    </div>
+    <div class="test-item">
+      <div class="label">Downlink Speed</div>
+      <div class="value"><span id="downlink"></span></div>
+    </div>
+    <div class="test-item">
+      <div class="label">Online Status</div>
+      <div class="value"><span id="online-status"></span></div>
+    </div>
+  </div>
+
+  <div class="test-section">
+    <h2>⚡ Performance Metrics</h2>
+    <div class="test-item">
+      <div class="label">Page Load Time</div>
+      <div class="value"><span id="load-time"></span></div>
+    </div>
+    <div class="test-item">
+      <div class="label">DOM Content Loaded</div>
+      <div class="value"><span id="dom-loaded"></span></div>
+    </div>
+    <div class="test-item">
+      <div class="label">First Paint</div>
+      <div class="value"><span id="first-paint"></span></div>
+    </div>
+  </div>
+
+  <div class="test-section">
+    <h2>🔧 Interactive Tests</h2>
+    <button onclick="testTouchGesture()">Test Touch Gesture</button>
+    <button onclick="testOrientation()">Test Orientation</button>
+    <button onclick="testVibration()">Test Vibration</button>
+    <button onclick="testNotification()">Test Notification</button>
+    <button onclick="testShare()">Test Share API</button>
+    <button onclick="testInstallPWA()">Test Install PWA</button>
+    <div id="test-result" style="margin-top: 12px; padding: 12px; background: rgba(0,229,255,0.1); border-radius: 6px; display: none;"></div>
+  </div>
+
+  <div class="test-section">
+    <h2>📋 Responsive CSS Checks</h2>
+    <div class="test-item">
+      <div class="label">Responsive CSS Loaded</div>
+      <div class="value"><span id="responsive-css"></span></div>
+    </div>
+    <div class="test-item">
+      <div class="label">Mobile Nav Script</div>
+      <div class="value"><span id="mobile-nav"></span></div>
+    </div>
+    <div class="test-item">
+      <div class="label">PWA Init Script</div>
+      <div class="value"><span id="pwa-init"></span></div>
+    </div>
+  </div>
+
+  <div class="test-section">
+    <h2>🎯 Quick Links</h2>
+    <button onclick="window.location.href='index.html'">Test Main Page</button>
+    <button onclick="window.location.href='portfolio.html'">Test Portfolio Page</button>
+    <button onclick="window.open('https://pagespeed.web.dev/', '_blank')">PageSpeed Insights</button>
+    <button onclick="window.open('https://web.dev/measure/', '_blank')">Web.dev Measure</button>
+  </div>
+</div>
+
+<script>
+// Viewport Info
+document.getElementById('screen-size').textContent = `${screen.width}×${screen.height}`;
+document.getElementById('viewport-size').textContent = `${window.innerWidth}×${window.innerHeight}`;
+document.getElementById('pixel-ratio').textContent = window.devicePixelRatio || 1;
+document.getElementById('orientation').textContent = window.screen.orientation ? window.screen.orientation.type : 'unknown';
+
+// Device Type
+function getDeviceType() {
+  const width = window.innerWidth;
+  if (width < 481) return '📱 Small Mobile';
+  if (width < 768) return '📱 Medium Mobile';
+  if (width < 1025) return '📱 Tablet';
+  if (width < 1920) return '💻 Desktop';
+  return '🖥️ Large Desktop';
+}
+document.getElementById('device-type').textContent = getDeviceType();
+
+// Feature Detection
+function setStatus(id, supported, label) {
+  const el = document.getElementById(id);
+  if (supported) {
+    el.innerHTML = `<span class="status pass">✅ PASS</span> ${label}`;
+  } else {
+    el.innerHTML = `<span class="status fail">❌ FAIL</span> ${label}`;
+  }
+}
+
+setStatus('touch-support', 'ontouchstart' in window, 'Touch events supported');
+setStatus('service-worker', 'serviceWorker' in navigator, 'Service Worker API available');
+setStatus('local-storage', typeof(Storage) !== 'undefined', 'Local Storage available');
+setStatus('indexed-db', 'indexedDB' in window, 'IndexedDB available');
+
+// PWA Installable
+let installPromptAvailable = false;
+window.addEventListener('beforeinstallprompt', (e) => {
+  installPromptAvailable = true;
+  setStatus('pwa-installable', true, 'Install prompt available');
+});
+
+setTimeout(() => {
+  if (!installPromptAvailable) {
+    setStatus('pwa-installable', false, 'Not installable (already installed or not supported)');
+  }
+}, 1000);
+
+// Offline Support
+navigator.serviceWorker.getRegistration().then((reg) => {
+  setStatus('offline-support', !!reg, reg ? 'Service Worker registered' : 'No service worker found');
+});
+
+// Network Info
+if ('connection' in navigator) {
+  const conn = navigator.connection;
+  document.getElementById('connection-type').textContent = conn.type || 'unknown';
+  document.getElementById('effective-type').textContent = conn.effectiveType || 'unknown';
+  document.getElementById('downlink').textContent = conn.downlink ? `${conn.downlink} Mbps` : 'unknown';
+} else {
+  document.getElementById('connection-type').textContent = 'Not supported';
+  document.getElementById('effective-type').textContent = 'Not supported';
+  document.getElementById('downlink').textContent = 'Not supported';
+}
+
+document.getElementById('online-status').innerHTML = navigator.onLine 
+  ? '<span class="status pass">🌐 ONLINE</span>' 
+  : '<span class="status fail">📴 OFFLINE</span>';
+
+// Performance
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    const perf = performance.timing;
+    const loadTime = perf.loadEventEnd - perf.navigationStart;
+    const domLoaded = perf.domContentLoadedEventEnd - perf.navigationStart;
+    
+    document.getElementById('load-time').innerHTML = `${loadTime}ms ${loadTime < 3000 ? '<span class="status pass">GOOD</span>' : '<span class="status warning">SLOW</span>'}`;
+    document.getElementById('dom-loaded').innerHTML = `${domLoaded}ms ${domLoaded < 2000 ? '<span class="status pass">GOOD</span>' : '<span class="status warning">SLOW</span>'}`;
+    
+    if (performance.getEntriesByType) {
+      const paints = performance.getEntriesByType('paint');
+      const firstPaint = paints.find(p => p.name === 'first-paint');
+      if (firstPaint) {
+        document.getElementById('first-paint').innerHTML = `${Math.round(firstPaint.startTime)}ms ${firstPaint.startTime < 1000 ? '<span class="status pass">GOOD</span>' : '<span class="status warning">SLOW</span>'}`;
+      } else {
+        document.getElementById('first-paint').textContent = 'Not available';
+      }
+    }
+  }, 0);
+});
+
+// File checks
+function checkFile(url, id) {
+  fetch(url, { method: 'HEAD' })
+    .then(res => {
+      if (res.ok) {
+        setStatus(id, true, 'File loaded successfully');
+      } else {
+        setStatus(id, false, `File not found (${res.status})`);
+      }
+    })
+    .catch(() => {
+      setStatus(id, false, 'Failed to load file');
+    });
+}
+
+checkFile('responsive.css', 'responsive-css');
+checkFile('mobile-nav.js', 'mobile-nav');
+checkFile('pwa-init.js', 'pwa-init');
+
+// Interactive Tests
+function showResult(message, isSuccess = true) {
+  const result = document.getElementById('test-result');
+  result.style.display = 'block';
+  result.style.background = isSuccess ? 'rgba(0,229,255,0.2)' : 'rgba(255,46,62,0.2)';
+  result.textContent = message;
+  setTimeout(() => {
+    result.style.display = 'none';
+  }, 3000);
+}
+
+function testTouchGesture() {
+  if ('ontouchstart' in window) {
+    showResult('✅ Touch events supported! Try swiping on the main page.');
+  } else {
+    showResult('❌ Touch events not supported on this device.', false);
+  }
+}
+
+function testOrientation() {
+  if (window.screen.orientation) {
+    showResult(`✅ Current orientation: ${window.screen.orientation.type}`);
+  } else {
+    showResult('❌ Orientation API not supported.', false);
+  }
+}
+
+function testVibration() {
+  if ('vibrate' in navigator) {
+    navigator.vibrate(200);
+    showResult('✅ Device vibrated! (if supported by hardware)');
+  } else {
+    showResult('❌ Vibration API not supported.', false);
+  }
+}
+
+function testNotification() {
+  if ('Notification' in window) {
+    Notification.requestPermission().then(permission => {
+      if (permission === 'granted') {
+        new Notification('Test Notification', {
+          body: 'Portfolio notifications work!',
+          icon: 'images/logo.png'
+        });
+        showResult('✅ Notification sent!');
+      } else {
+        showResult('⚠️ Notification permission denied.', false);
+      }
+    });
+  } else {
+    showResult('❌ Notifications not supported.', false);
+  }
+}
+
+function testShare() {
+  if (navigator.share) {
+    navigator.share({
+      title: 'Baidurjya Portfolio',
+      text: 'Check out this portfolio!',
+      url: window.location.href
+    }).then(() => {
+      showResult('✅ Share successful!');
+    }).catch(() => {
+      showResult('⚠️ Share cancelled.', false);
+    });
+  } else {
+    showResult('❌ Web Share API not supported.', false);
+  }
+}
+
+function testInstallPWA() {
+  if (installPromptAvailable) {
+    showResult('✅ Install prompt available! Check main page for banner.');
+  } else {
+    showResult('⚠️ Already installed or not supported.', false);
+  }
+}
+
+// Update on resize
+window.addEventListener('resize', () => {
+  document.getElementById('viewport-size').textContent = `${window.innerWidth}×${window.innerHeight}`;
+  document.getElementById('device-type').textContent = getDeviceType();
+  document.getElementById('orientation').textContent = window.screen.orientation ? window.screen.orientation.type : 'unknown';
+});
+
+// Online/Offline
+window.addEventListener('online', () => {
+  document.getElementById('online-status').innerHTML = '<span class="status pass">🌐 ONLINE</span>';
+});
+
+window.addEventListener('offline', () => {
+  document.getElementById('online-status').innerHTML = '<span class="status fail">📴 OFFLINE</span>';
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,832 @@
+/* ==========================================
+   RESPONSIVE & MOBILE OPTIMIZATION
+   ========================================== */
+
+/* ============================================
+   MOBILE FIRST - BASE STYLES (320px+)
+   ============================================ */
+
+/* Touch-friendly adjustments */
+@media (max-width: 900px) {
+  /* Remove cursor effects on mobile */
+  body {
+    cursor: auto !important;
+  }
+  
+  #reticle, #dot {
+    display: none !important;
+  }
+
+  /* Enable text selection on mobile */
+  body {
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+  }
+
+  /* Enable image interaction on mobile */
+  img {
+    pointer-events: auto;
+  }
+}
+
+/* ============================================
+   SMALL MOBILE (320px - 480px)
+   ============================================ */
+@media (max-width: 480px) {
+  /* Reduce padding on small screens */
+  .wrap {
+    padding: 0 16px;
+  }
+
+  /* Navigation */
+  nav {
+    padding: 16px;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .logo {
+    font-size: 16px;
+  }
+
+  .logo img {
+    height: 24px !important;
+  }
+
+  /* Hide navigation links, show menu button instead */
+  .navlinks {
+    display: none;
+  }
+
+  /* Hero Section */
+  .hero {
+    min-height: 90vh;
+    padding-top: 70px;
+  }
+
+  .hero-title {
+    font-size: 36px !important;
+    line-height: 0.9;
+  }
+
+  .hero-sub {
+    font-size: 9px;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .hero-bio {
+    font-size: 14px;
+    line-height: 1.6;
+    margin-top: 20px;
+  }
+
+  .hero-cta {
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+  }
+
+  .btn {
+    width: 100%;
+    text-align: center;
+    padding: 14px 20px;
+    font-size: 11px;
+  }
+
+  /* Eyebrow */
+  .eyebrow {
+    font-size: 9px;
+    margin-bottom: 12px;
+  }
+
+  .eyebrow::before {
+    width: 16px;
+  }
+
+  /* Section Titles */
+  .sec-title {
+    font-size: 32px !important;
+    line-height: 1;
+  }
+
+  .sec-head {
+    margin-bottom: 32px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .sec-num {
+    font-size: 10px;
+  }
+
+  /* Profile Section */
+  .profile {
+    padding: 80px 0 60px;
+  }
+
+  .profile-grid {
+    grid-template-columns: 1fr !important;
+    gap: 32px !important;
+  }
+
+  .profile-grid > div:first-child {
+    max-width: 100% !important;
+    width: 100%;
+  }
+
+  .profile-text p {
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  .stat-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .stat {
+    padding: 20px 18px;
+  }
+
+  .stat b {
+    font-size: 28px;
+  }
+
+  .stat span {
+    font-size: 10px;
+  }
+
+  /* Arsenal Section */
+  .arsenal {
+    padding: 60px 0;
+  }
+
+  .arsenal-grid {
+    grid-template-columns: 1fr !important;
+    gap: 30px;
+  }
+
+  .arsenal-cat {
+    padding-left: 16px;
+  }
+
+  .arsenal-cat h4 {
+    font-size: 10px;
+    margin-bottom: 12px;
+  }
+
+  .chip {
+    font-size: 10px;
+    padding: 6px 10px;
+  }
+
+  /* Missions/Projects Section */
+  .missions {
+    padding: 60px 0;
+  }
+
+  .mission {
+    grid-template-columns: 50px 1fr !important;
+    gap: 16px;
+    padding: 32px 0;
+  }
+
+  .m-file {
+    font-size: 10px;
+  }
+
+  .m-main h3 {
+    font-size: 20px !important;
+    margin-bottom: 10px;
+  }
+
+  .m-main .tagline {
+    font-size: 12px;
+    margin-bottom: 12px;
+  }
+
+  .m-main .tags {
+    gap: 6px;
+  }
+
+  .m-main .tags span {
+    font-size: 9px;
+    padding: 4px 8px;
+  }
+
+  .m-detail {
+    grid-column: 2/3;
+    margin-top: 12px;
+  }
+
+  .m-detail li {
+    font-size: 13px;
+    line-height: 1.5;
+    margin-bottom: 8px;
+  }
+
+  /* Project Cards */
+  .project-card {
+    top: 80px;
+    margin-bottom: 40px;
+  }
+
+  .card-inner {
+    padding: 24px 20px;
+    border-radius: 16px;
+  }
+
+  .card-grid {
+    grid-template-columns: 1fr !important;
+    gap: 20px;
+  }
+
+  /* Scroll Marquee */
+  .scroll-marquee {
+    padding: 40px 0;
+  }
+
+  .marquee-item {
+    width: 280px;
+    height: 180px;
+  }
+
+  .marquee-overlay {
+    padding: 12px;
+  }
+
+  .marquee-overlay span {
+    font-size: 10px;
+  }
+
+  /* Logs/Experience Section */
+  .logs {
+    padding: 60px 0;
+  }
+
+  .log-item {
+    grid-template-columns: 1fr !important;
+    gap: 12px;
+    padding: 28px 0;
+  }
+
+  .log-date {
+    font-size: 10px;
+  }
+
+  .log-role h4 {
+    font-size: 18px;
+  }
+
+  .log-role .org {
+    font-size: 11px;
+    margin-bottom: 10px;
+  }
+
+  .log-role li {
+    font-size: 13px;
+    line-height: 1.5;
+    padding-left: 14px;
+  }
+
+  /* Education Section */
+  .edu {
+    padding: 60px 0;
+  }
+
+  .edu-grid {
+    grid-template-columns: 1fr !important;
+    gap: 40px;
+  }
+
+  .edu-row {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 14px 0;
+    gap: 8px;
+  }
+
+  .edu-row .deg {
+    font-size: 14px;
+  }
+
+  .edu-row .inst {
+    font-size: 11px;
+  }
+
+  .edu-row .score {
+    font-size: 12px;
+  }
+
+  .cert-list li {
+    font-size: 12px;
+    padding: 12px 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .cert-list li span {
+    font-size: 10px;
+  }
+
+  /* Transmission/Contact Section */
+  .transmission {
+    padding: 80px 0 60px;
+  }
+
+  .t-title {
+    font-size: 36px !important;
+  }
+
+  .t-sub {
+    font-size: 11px;
+    margin: 20px auto 32px;
+  }
+
+  .t-links {
+    flex-direction: column;
+    width: 100%;
+    padding: 0 16px;
+  }
+
+  .t-links .btn {
+    width: 100%;
+  }
+
+  /* Footer */
+  footer {
+    padding: 24px 16px;
+    font-size: 9px;
+    text-align: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  /* HUD Corner - Hide on small mobile */
+  .hud-corner {
+    display: none !important;
+  }
+
+  /* Marquee Strip */
+  .marquee-strip {
+    padding: 12px 0;
+  }
+
+  .marquee-track span {
+    font-size: 11px;
+    padding-right: 24px;
+  }
+
+  /* Speedlines - reduce opacity on mobile */
+  .speedlines {
+    opacity: 0.2;
+  }
+
+  /* Halftone - reduce on mobile */
+  .halftone {
+    opacity: 0.3 !important;
+  }
+
+  /* Grain - reduce on mobile for performance */
+  .grain {
+    opacity: 0.02;
+  }
+}
+
+/* ============================================
+   MEDIUM MOBILE (481px - 767px)
+   ============================================ */
+@media (min-width: 481px) and (max-width: 767px) {
+  .wrap {
+    padding: 0 24px;
+  }
+
+  nav {
+    padding: 18px 24px;
+  }
+
+  .logo {
+    font-size: 18px;
+  }
+
+  .logo img {
+    height: 28px !important;
+  }
+
+  .hero-title {
+    font-size: 48px !important;
+  }
+
+  .hero-sub {
+    font-size: 11px;
+  }
+
+  .hero-bio {
+    font-size: 15px;
+  }
+
+  .btn {
+    font-size: 11px;
+    padding: 14px 24px;
+  }
+
+  .hero-cta {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .hero-cta .btn {
+    flex: 1;
+    min-width: 140px;
+  }
+
+  .sec-title {
+    font-size: 42px !important;
+  }
+
+  .profile {
+    padding: 100px 0 70px;
+  }
+
+  .profile-text p {
+    font-size: 16px;
+  }
+
+  .stat b {
+    font-size: 30px;
+  }
+
+  .mission {
+    grid-template-columns: 60px 1fr !important;
+    gap: 24px;
+  }
+
+  .m-main h3 {
+    font-size: 24px !important;
+  }
+
+  .m-main .tagline {
+    font-size: 13px;
+  }
+
+  .m-detail li {
+    font-size: 14px;
+  }
+
+  .marquee-item {
+    width: 320px;
+    height: 200px;
+  }
+}
+
+/* ============================================
+   TABLET (768px - 1024px)
+   ============================================ */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .wrap {
+    max-width: 100%;
+    padding: 0 32px;
+  }
+
+  nav {
+    padding: 20px 32px;
+  }
+
+  .navlinks {
+    gap: 20px;
+    font-size: 11px;
+  }
+
+  .hero-title {
+    font-size: 72px !important;
+  }
+
+  .hero-sub {
+    font-size: 13px;
+  }
+
+  .hero-bio {
+    font-size: 16px;
+    max-width: 500px;
+  }
+
+  .profile-grid {
+    gap: 50px;
+  }
+
+  .profile-text p {
+    font-size: 17px;
+  }
+
+  .arsenal-grid {
+    gap: 30px 40px;
+  }
+
+  .mission {
+    grid-template-columns: 90px 1fr 1fr;
+    gap: 28px;
+  }
+
+  .m-main h3 {
+    font-size: 28px !important;
+  }
+
+  .card-grid {
+    gap: 30px;
+  }
+
+  .card-inner {
+    padding: 32px;
+  }
+}
+
+/* ============================================
+   LANDSCAPE MOBILE (max-height: 500px)
+   ============================================ */
+@media (max-height: 500px) and (orientation: landscape) {
+  .hero {
+    min-height: auto;
+    padding: 100px 0 60px;
+  }
+
+  .hero-title {
+    font-size: 48px !important;
+  }
+
+  .hero-bio {
+    font-size: 14px;
+  }
+
+  .transmission {
+    padding: 100px 0 60px;
+  }
+
+  .t-title {
+    font-size: 48px !important;
+  }
+}
+
+/* ============================================
+   PERFORMANCE OPTIMIZATIONS FOR MOBILE
+   ============================================ */
+@media (max-width: 767px) {
+  /* Reduce animation complexity */
+  * {
+    animation-duration: 0.3s !important;
+    transition-duration: 0.3s !important;
+  }
+
+  /* Simplify transforms */
+  .reveal {
+    transform: translateY(20px);
+  }
+
+  /* Reduce blur for performance */
+  nav {
+    backdrop-filter: blur(5px);
+  }
+
+  /* Remove expensive effects */
+  .btn::before {
+    transition: transform 0.25s ease;
+  }
+
+  /* Optimize scroll performance */
+  .hero, .profile, .arsenal, .missions, .logs, .transmission {
+    will-change: auto;
+  }
+}
+
+/* ============================================
+   TOUCH IMPROVEMENTS
+   ============================================ */
+@media (hover: none) and (pointer: coarse) {
+  /* Increase tap target sizes */
+  .btn,
+  .navlinks a,
+  .chip {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Remove hover effects on touch devices */
+  .btn:hover::before {
+    transform: translateY(101%);
+  }
+
+  .chip:hover {
+    transform: translateY(0);
+  }
+
+  /* Better touch feedback */
+  .btn:active {
+    transform: scale(0.98);
+  }
+
+  .chip:active {
+    opacity: 0.7;
+  }
+
+  /* Remove magnetic effects */
+  .magnetic {
+    transform: none !important;
+  }
+}
+
+/* ============================================
+   MOBILE MENU (HAMBURGER)
+   ============================================ */
+@media (max-width: 767px) {
+  /* Mobile menu button */
+  .mobile-menu-btn {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    cursor: pointer;
+    z-index: 501;
+    padding: 8px;
+  }
+
+  .mobile-menu-btn span {
+    width: 24px;
+    height: 2px;
+    background: var(--paper);
+    transition: all 0.3s;
+  }
+
+  .mobile-menu-btn.active span:nth-child(1) {
+    transform: rotate(45deg) translate(6px, 6px);
+  }
+
+  .mobile-menu-btn.active span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .mobile-menu-btn.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(6px, -6px);
+  }
+
+  /* Mobile navigation */
+  .navlinks {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    height: 100vh;
+    width: 250px;
+    background: var(--ink-2);
+    border-left: 1px solid var(--line);
+    flex-direction: column;
+    padding: 80px 24px 24px;
+    gap: 24px;
+    transition: right 0.3s ease;
+    z-index: 500;
+    display: flex;
+  }
+
+  .navlinks.active {
+    right: 0;
+  }
+
+  .navlinks a {
+    font-size: 14px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  /* Overlay when menu is open */
+  .mobile-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(11, 13, 16, 0.8);
+    backdrop-filter: blur(4px);
+    z-index: 499;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+
+  .mobile-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+/* ============================================
+   VERY LARGE SCREENS (1920px+)
+   ============================================ */
+@media (min-width: 1920px) {
+  .wrap {
+    max-width: 1400px;
+  }
+
+  .hero-title {
+    font-size: 180px !important;
+  }
+
+  .sec-title {
+    font-size: 84px !important;
+  }
+}
+
+/* ============================================
+   ACCESSIBILITY IMPROVEMENTS
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .grain,
+  .scanlines,
+  .speedlines {
+    animation: none !important;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  :root {
+    --line: rgba(237, 232, 222, 0.3);
+  }
+
+  .chip,
+  .btn {
+    border-width: 2px;
+  }
+}
+
+/* Dark mode support (if system preference) */
+@media (prefers-color-scheme: light) {
+  /* Portfolio is dark by default, but we can add light mode support */
+  /* Uncomment and customize if needed */
+  /*
+  :root {
+    --ink: #f5f5f5;
+    --ink-2: #ffffff;
+    --paper: #1a1a1a;
+  }
+  */
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+@media print {
+  nav,
+  .hud-corner,
+  .grain,
+  .scanlines,
+  .speedlines,
+  .halftone,
+  .btn,
+  .mobile-menu-btn,
+  .mobile-overlay,
+  #reticle,
+  #dot {
+    display: none !important;
+  }
+
+  body {
+    background: white;
+    color: black;
+  }
+
+  .wrap {
+    max-width: 100%;
+    padding: 0;
+  }
+
+  section {
+    page-break-inside: avoid;
+  }
+}
+
+/* ============================================
+   LOADING OPTIMIZATION
+   ============================================ */
+@media (max-width: 767px) {
+  /* Lazy load images optimization */
+  img {
+    content-visibility: auto;
+  }
+
+  /* Reduce initial render cost */
+  .background-canvas,
+  .gradient-overlay {
+    display: none;
+  }
+}
