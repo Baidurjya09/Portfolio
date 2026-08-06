@@ -108,45 +108,11 @@ body {
   color: var(--paper);
   font-family: 'Space Grotesk', sans-serif;
   overflow-x: hidden;
-  cursor: none;
+  cursor: auto;
   -webkit-user-select: none;
   user-select: none;
 }
 a, button, .btn { cursor: pointer !important; }
-::selection { background: var(--crimson); color: var(--bg); }
-img {
-  -webkit-user-drag: none;
-  user-drag: none;
-  pointer-events: none;
-}
-/* ===== SIMPLE CURSOR ===== */
-#cursor-circle {
-  position: fixed;
-  top: 0; left: 0;
-  width: 12px; height: 12px;
-  background: rgba(255,255,255,0.9);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 9999;
-  transform: translate(-50%, -50%);
-  transition: width .25s ease, height .25s ease, background .25s ease;
-  mix-blend-mode: difference;
-}
-#cursor-dot {
-  position: fixed;
-  top: 0; left: 0;
-  width: 4px; height: 4px;
-  background: var(--crimson);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 10000;
-  transform: translate(-50%, -50%);
-}
-#cursor-circle.hover { width: 40px; height: 40px; }
-@media (max-width: 900px) {
-  #cursor-circle, #cursor-dot { display: none; }
-  body { cursor: auto; }
-}
 </style>
 <style>
 /* ===== BACKGROUND LAYERS ===== */
@@ -386,25 +352,72 @@ nav {
   transition: border-color .25s, color .25s, transform .2s;
 }
 .chip:hover { border-color: var(--crimson); color: var(--paper); transform: translateY(-2px); }
-/* ===== PROJECTS / MISSIONS ===== */
+/* ===== PROJECTS / MISSIONS — CARD STYLE ===== */
 .missions { padding: 130px 0; }
-.mission {
-  border-top: 1px solid var(--line); padding: 48px 0;
-  display: grid; grid-template-columns: 110px 1fr 1fr; gap: 36px;
-  position: relative;
+.project-stack { position: relative; }
+.project-card {
+  position: sticky; top: 110px;
+  margin-bottom: 32px;
+  transform-style: preserve-3d;
+  will-change: transform;
 }
-.mission:last-child { border-bottom: 1px solid var(--line); }
-@media (max-width: 900px) { .mission { grid-template-columns: 70px 1fr; } }
-.m-file { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--crimson); letter-spacing: .08em; padding-top: 6px; }
-.m-main h3 { font-family: 'Anton', sans-serif; text-transform: uppercase; font-size: clamp(24px,3.4vw,38px); line-height: 1.02; margin-bottom: 14px; }
-.m-main .tagline { color: rgba(232,228,217,.58); font-size: 13px; margin-bottom: 18px; font-family: 'JetBrains Mono', monospace; letter-spacing: .02em; }
-.m-main .tags { display: flex; flex-wrap: wrap; gap: 8px; }
-.m-main .tags span { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--cyan); border: 1px solid rgba(0,229,255,.25); padding: 4px 10px; }
-.m-detail { align-self: start; }
-.m-detail ul { list-style: none; }
-.m-detail li { font-size: 14px; line-height: 1.65; color: rgba(232,228,217,.78); padding-left: 18px; position: relative; margin-bottom: 10px; }
-.m-detail li::before { content: '—'; position: absolute; left: 0; color: var(--crimson); }
-@media (max-width: 900px) { .m-detail { grid-column: 2/3; } }
+.card-inner {
+  background: var(--ink-2);
+  border: 2px solid var(--line);
+  border-radius: 20px;
+  padding: 40px;
+  position: relative; overflow: hidden;
+  transition: border-color .4s;
+}
+.card-inner:hover { border-color: var(--crimson); }
+.card-inner::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(circle at var(--mx,50%) var(--my,50%), rgba(255,46,62,.07) 0%, transparent 55%);
+  pointer-events: none; opacity: 0; transition: opacity .4s;
+}
+.card-inner:hover::before { opacity: 1; }
+.card-grid {
+  display: grid; grid-template-columns: 1fr 1.1fr; gap: 40px; align-items: center;
+}
+@media (max-width: 900px) { .card-grid { grid-template-columns: 1fr; gap: 24px; } }
+.card-num {
+  font-family: 'JetBrains Mono', monospace; font-size: 11px;
+  color: var(--crimson); letter-spacing: .1em; margin-bottom: 14px;
+}
+.card-title {
+  font-family: 'Anton', sans-serif; text-transform: uppercase;
+  font-size: clamp(28px,4vw,46px); line-height: 1; margin-bottom: 12px;
+}
+.card-tagline {
+  font-family: 'JetBrains Mono', monospace; font-size: 12px;
+  color: rgba(232,228,217,.55); letter-spacing: .02em; margin-bottom: 20px;
+}
+.card-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+.card-tags span {
+  font-family: 'JetBrains Mono', monospace; font-size: 10px;
+  color: var(--cyan); border: 1px solid rgba(0,229,255,.25); padding: 4px 10px;
+}
+.card-detail ul { list-style: none; }
+.card-detail li {
+  font-size: 14px; line-height: 1.65; color: rgba(232,228,217,.78);
+  padding-left: 18px; position: relative; margin-bottom: 10px;
+}
+.card-detail li::before { content: '—'; position: absolute; left: 0; color: var(--crimson); }
+.card-image {
+  border-radius: 12px; overflow: hidden;
+  border: 1px solid var(--line); aspect-ratio: 16/9; background: var(--bg);
+  display: flex; align-items: center; justify-content: center;
+}
+.card-image img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; filter: grayscale(.3) contrast(1.1); }
+.card-image-placeholder {
+  width: 100%; height: 100%; min-height: 200px;
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, var(--ink-2) 0%, rgba(255,46,62,.06) 100%);
+}
+.card-image-placeholder span {
+  font-family: 'Anton', sans-serif; font-size: 56px;
+  color: rgba(255,46,62,.18); text-transform: uppercase;
+}
 /* ===== LOGS / EXPERIENCE ===== */
 .logs {
   padding: 110px 0; background: var(--ink-2);
@@ -505,10 +518,6 @@ footer a:hover { color: var(--crimson); }
 <div class="dot-grid"></div>
 <div class="grain"></div>
 <div class="scanlines"></div>
-
-<!-- Simple cursor -->
-<div id="cursor-circle"></div>
-<div id="cursor-dot"></div>
 
 <!-- Navigation -->
 <nav>
@@ -696,7 +705,7 @@ footer a:hover { color: var(--crimson); }
 </section>
 
 <!-- ============================================================
-     WORK / MISSIONS
+     WORK / MISSIONS — CARD LAYOUT
      ============================================================ -->
 <section class="missions" id="work">
   <div class="wrap">
@@ -708,82 +717,121 @@ footer a:hover { color: var(--crimson); }
       <div class="sec-num">04 FILES DECLASSIFIED</div>
     </div>
 
-    <!-- CivicMind -->
-    <div class="mission reveal">
-      <div class="m-file">FILE 01</div>
-      <div class="m-main">
-        <h3>CivicMind</h3>
-        <div class="tagline">Multi-agent civic governance simulation — Meta × PyTorch × OpenEnv Hackathon (Solo Finalist)</div>
-        <div class="tags">
-          <span>PyTorch</span><span>LLM Agents</span><span>FastAPI</span><span>Streamlit</span>
+    <div class="project-stack">
+
+      <!-- Card 1: CivicMind -->
+      <div class="project-card reveal">
+        <div class="card-inner">
+          <div class="card-grid">
+            <div>
+              <div class="card-num">FILE 01 // HACKATHON FINALIST</div>
+              <h3 class="card-title">CivicMind</h3>
+              <p class="card-tagline">Multi-agent civic governance simulation — Meta × PyTorch × OpenEnv (Solo, Top 0.2%)</p>
+              <div class="card-tags">
+                <span>PyTorch</span><span>LLM Agents</span><span>FastAPI</span><span>Streamlit</span><span>RL</span>
+              </div>
+              <div class="card-detail">
+                <ul>
+                  <li>Simulated 10,000 virtual citizens over a 52-week timeline with six specialized government AI agents</li>
+                  <li>Designed prompt-engineering workflows and a PyTorch composite reward model for agent decisions</li>
+                  <li>Shipped a FastAPI backend, Streamlit dashboard, and Colab training notebook</li>
+                </ul>
+              </div>
+              <a href="https://github.com/Baidurjya09/CivicMind" target="_blank" rel="noopener noreferrer"
+                 class="btn magnetic" style="margin-top:24px;"><span>View on GitHub</span></a>
+            </div>
+            <div class="card-image">
+              <img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?w=600&q=75" alt="CivicMind AI Governance" loading="lazy" width="600" height="338">
+            </div>
+          </div>
         </div>
       </div>
-      <div class="m-detail">
-        <ul>
-          <li>Simulated 10,000 virtual citizens over a 52-week timeline with six specialized government AI agents</li>
-          <li>Designed prompt-engineering workflows and a PyTorch composite reward model for agent decisions</li>
-          <li>Shipped a FastAPI backend, Streamlit dashboard, and Colab training notebook</li>
-        </ul>
-      </div>
-    </div>
 
-    <!-- GORMODE-A -->
-    <div class="mission reveal">
-      <div class="m-file">FILE 02</div>
-      <div class="m-main">
-        <h3>GORMODE-A</h3>
-        <div class="tagline">Guardian AI for real-time risk &amp; emergency response</div>
-        <div class="tags">
-          <span>RAG</span><span>ChromaDB</span><span>FastAPI</span><span>ReactJS</span><span>Docker</span>
+      <!-- Card 2: GORMODE-A -->
+      <div class="project-card reveal">
+        <div class="card-inner">
+          <div class="card-grid">
+            <div>
+              <div class="card-num">FILE 02 // AI SAFETY</div>
+              <h3 class="card-title">GORMODE-A</h3>
+              <p class="card-tagline">Guardian AI for real-time risk &amp; emergency response</p>
+              <div class="card-tags">
+                <span>RAG</span><span>ChromaDB</span><span>FastAPI</span><span>ReactJS</span><span>Docker</span>
+              </div>
+              <div class="card-detail">
+                <ul>
+                  <li>Dual-mode classification with 3-tier risk assessment and automatic SOS escalation</li>
+                  <li>RAG over Indian legal knowledge for context-aware safety guidance</li>
+                  <li>Full-stack build with GPS-based emergency workflows and scalable AI inference</li>
+                </ul>
+              </div>
+              <a href="https://github.com/Baidurjya09/GORMODE-A" target="_blank" rel="noopener noreferrer"
+                 class="btn magnetic" style="margin-top:24px;"><span>View on GitHub</span></a>
+            </div>
+            <div class="card-image">
+              <img src="https://images.unsplash.com/photo-1584438784894-089d6a62b8fa?w=600&q=75" alt="Emergency Response" loading="lazy" width="600" height="338">
+            </div>
+          </div>
         </div>
       </div>
-      <div class="m-detail">
-        <ul>
-          <li>Dual-mode classification with 3-tier risk assessment and automatic SOS escalation</li>
-          <li>Retrieval-augmented generation over Indian legal knowledge for context-aware safety guidance</li>
-          <li>Full-stack build with GPS-based emergency workflows and scalable AI inference</li>
-        </ul>
-      </div>
-    </div>
 
-    <!-- AI Hiring Assistant -->
-    <div class="mission reveal">
-      <div class="m-file">FILE 03</div>
-      <div class="m-main">
-        <h3>AI Hiring Assistant</h3>
-        <div class="tagline">OpenEnv-compliant recruitment evaluation platform for LLM agents</div>
-        <div class="tags">
-          <span>OpenEnv</span><span>Pydantic</span><span>Docker</span><span>HuggingFace</span>
+      <!-- Card 3: AI Hiring Assistant -->
+      <div class="project-card reveal">
+        <div class="card-inner">
+          <div class="card-grid">
+            <div>
+              <div class="card-num">FILE 03 // LLM PLATFORM</div>
+              <h3 class="card-title">AI Hiring Assistant</h3>
+              <p class="card-tagline">OpenEnv-compliant recruitment evaluation platform for LLM agents</p>
+              <div class="card-tags">
+                <span>OpenEnv</span><span>Pydantic</span><span>Docker</span><span>HuggingFace</span>
+              </div>
+              <div class="card-detail">
+                <ul>
+                  <li>Simulated technical recruitment across IT, Management, Marketing, and Business domains</li>
+                  <li>Deterministic candidate evaluation via an F1-score based grading system</li>
+                  <li>Modular schema with OpenAI / HuggingFace-compatible API integration</li>
+                </ul>
+              </div>
+              <a href="https://github.com/Baidurjya09/AI-Hiring-Assistant" target="_blank" rel="noopener noreferrer"
+                 class="btn magnetic" style="margin-top:24px;"><span>View on GitHub</span></a>
+            </div>
+            <div class="card-image">
+              <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=600&q=75" alt="AI Recruitment" loading="lazy" width="600" height="338">
+            </div>
+          </div>
         </div>
       </div>
-      <div class="m-detail">
-        <ul>
-          <li>Simulated technical recruitment across IT, Management, Marketing, and Business domains</li>
-          <li>Deterministic candidate evaluation via an F1-score based grading system</li>
-          <li>Modular schema design with OpenAI / Hugging Face-compatible API integration</li>
-        </ul>
-      </div>
-    </div>
 
-    <!-- Multi-Disease Detection -->
-    <div class="mission reveal">
-      <div class="m-file">FILE 04</div>
-      <div class="m-main">
-        <h3>Multi-Disease Detection</h3>
-        <div class="tagline">Symptom-based disease prediction with risk scoring</div>
-        <div class="tags">
-          <span>ReactJS</span><span>Flask</span><span>ML Models</span>
+      <!-- Card 4: Multi-Disease Detection -->
+      <div class="project-card reveal">
+        <div class="card-inner">
+          <div class="card-grid">
+            <div>
+              <div class="card-num">FILE 04 // HEALTH AI</div>
+              <h3 class="card-title">Multi-Disease Detection</h3>
+              <p class="card-tagline">Symptom-based disease prediction with risk scoring</p>
+              <div class="card-tags">
+                <span>ReactJS</span><span>Flask</span><span>ML Models</span><span>Python</span>
+              </div>
+              <div class="card-detail">
+                <ul>
+                  <li>Trained ML models to predict likely conditions from symptom and health-indicator datasets</li>
+                  <li>Built a risk-scoring system to communicate prediction confidence</li>
+                  <li>Responsive ReactJS frontend deployed on a Flask backend</li>
+                </ul>
+              </div>
+              <a href="https://github.com/Baidurjya09" target="_blank" rel="noopener noreferrer"
+                 class="btn magnetic" style="margin-top:24px;"><span>View on GitHub</span></a>
+            </div>
+            <div class="card-image">
+              <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=600&q=75" alt="Medical AI" loading="lazy" width="600" height="338">
+            </div>
+          </div>
         </div>
       </div>
-      <div class="m-detail">
-        <ul>
-          <li>Trained ML models to predict likely conditions from symptom and health-indicator datasets</li>
-          <li>Built a risk-scoring system to communicate prediction confidence</li>
-          <li>Shipped a responsive ReactJS frontend on a Flask backend</li>
-        </ul>
-      </div>
-    </div>
 
+    </div><!-- /project-stack -->
   </div>
 </section>
 
@@ -1041,31 +1089,6 @@ footer a:hover { color: var(--crimson); }
 
 gsap.registerPlugin(ScrollTrigger);
 
-/* ---- SIMPLE CURSOR ---- */
-(function() {
-  var circle = document.getElementById('cursor-circle');
-  var dot    = document.getElementById('cursor-dot');
-  if (!circle || !dot) return;
-
-  var mx = 0, my = 0;  // exact mouse position (for dot)
-  var cx = 0, cy = 0;  // lagged position (for circle)
-
-  window.addEventListener('mousemove', function(e) {
-    mx = e.clientX;
-    my = e.clientY;
-    // dot follows exactly
-    gsap.to(dot, { x: mx, y: my, duration: 0.04, overwrite: true });
-    // circle follows with slight lag
-    gsap.to(circle, { x: mx, y: my, duration: 0.22, ease: 'power2.out', overwrite: true });
-  });
-
-  // Scale circle up on interactive elements
-  document.querySelectorAll('a, button, .btn, .chip, .stat, .mission, .repo-card').forEach(function(el) {
-    el.addEventListener('mouseenter', function() { circle.classList.add('hover'); });
-    el.addEventListener('mouseleave', function() { circle.classList.remove('hover'); });
-  });
-})();
-
 /* ---- CLOCK ---- */
 function tick() {
   var el = document.getElementById('clock');
@@ -1114,12 +1137,20 @@ document.querySelectorAll('.magnetic').forEach(function(el) {
 });
 
 /* ---- MISSION HOVER LINE ACCENT ---- */
-document.querySelectorAll('.mission').forEach(function(m) {
-  m.addEventListener('mouseenter', function() {
-    gsap.to(m, { backgroundColor: 'rgba(255,46,62,0.025)', duration: 0.3 });
+document.querySelectorAll('.card-inner').forEach(function(card) {
+  card.addEventListener('mousemove', function(e) {
+    var r = card.getBoundingClientRect();
+    var x = ((e.clientX - r.left) / r.width)  * 100;
+    var y = ((e.clientY - r.top)  / r.height) * 100;
+    card.style.setProperty('--mx', x + '%');
+    card.style.setProperty('--my', y + '%');
+    // Subtle 3D tilt
+    var rotX = ((e.clientY - r.top  - r.height/2) / r.height) * 4;
+    var rotY = ((e.clientX - r.left - r.width /2) / r.width ) * -4;
+    gsap.to(card, { rotateX: rotX, rotateY: rotY, transformPerspective: 1000, duration: 0.3, ease: 'power2.out' });
   });
-  m.addEventListener('mouseleave', function() {
-    gsap.to(m, { backgroundColor: 'transparent', duration: 0.3 });
+  card.addEventListener('mouseleave', function() {
+    gsap.to(card, { rotateX: 0, rotateY: 0, duration: 0.5, ease: 'power2.out' });
   });
 });
 
