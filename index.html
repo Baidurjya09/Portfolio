@@ -46,177 +46,109 @@
 <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
 <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()">
 <!-- ============================================================
-     Schema.org Structured Data — Person + Website + WebPage + BreadcrumbList
+     Schema.org Structured Data — @graph with all entities
      ============================================================ -->
-
-<!-- 1. Person Schema -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "Person",
-  "@id": "https://baidurjyabastavhazarika.netlify.app/#person",
-  "name": "Baidurjya Bastav Hazarika",
-  "alternateName": ["Baidurjya Hazarika", "BBH"],
-  "url": "https://baidurjyabastavhazarika.netlify.app",
-  "image": {
-    "@type": "ImageObject",
-    "url": "https://baidurjyabastavhazarika.netlify.app/images/profile.jpg",
-    "width": 600,
-    "height": 800
-  },
-  "jobTitle": "AI/ML Engineer and Full-Stack Developer",
-  "description": "BCA student at Assam Don Bosco University building production-grade AI systems. Meta PyTorch Hackathon Finalist among 52,000+ developers. Frontend Developer at Streak Remote.",
-  "email": "baidujyabastavhazarika@gmail.com",
-  "nationality": "Indian",
-  "address": {
-    "@type": "PostalAddress",
-    "addressLocality": "Guwahati",
-    "addressRegion": "Assam",
-    "addressCountry": "IN"
-  },
-  "worksFor": {
-    "@type": "Organization",
-    "name": "Streak Remote",
-    "url": "https://streakremote.com"
-  },
-  "alumniOf": {
-    "@type": "EducationalOrganization",
-    "name": "Assam Don Bosco University",
-    "url": "https://dbuniversity.ac.in"
-  },
-  "hasCredential": [
+  "@graph": [
     {
-      "@type": "EducationalOccupationalCredential",
-      "name": "Meta x PyTorch OpenEnv Hackathon Finalist",
-      "credentialCategory": "Achievement",
-      "recognizedBy": {
+      "@type": "Person",
+      "@id": "https://baidurjyabastavhazarika.netlify.app/#person",
+      "name": "Baidurjya Bastav Hazarika",
+      "alternateName": ["Baidurjya Hazarika", "BBH"],
+      "url": "https://baidurjyabastavhazarika.netlify.app",
+      "image": {
+        "@type": "ImageObject",
+        "url": "https://baidurjyabastavhazarika.netlify.app/images/profile.jpg",
+        "width": 600,
+        "height": 800
+      },
+      "jobTitle": "AI/ML Engineer and Full-Stack Developer",
+      "description": "BCA student at Assam Don Bosco University building production-grade AI systems. Meta PyTorch Hackathon Finalist among 52,000+ developers. Frontend Developer at Streak Remote.",
+      "email": "baidujyabastavhazarika@gmail.com",
+      "nationality": "Indian",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Guwahati",
+        "addressRegion": "Assam",
+        "addressCountry": "IN"
+      },
+      "worksFor": {
         "@type": "Organization",
-        "name": "Meta and PyTorch"
-      }
+        "name": "Streak Remote",
+        "url": "https://streakremote.com"
+      },
+      "alumniOf": {
+        "@type": "EducationalOrganization",
+        "name": "Assam Don Bosco University",
+        "url": "https://dbuniversity.ac.in"
+      },
+      "hasCredential": [
+        {
+          "@type": "EducationalOccupationalCredential",
+          "name": "Meta x PyTorch OpenEnv Hackathon Finalist",
+          "credentialCategory": "Achievement",
+          "recognizedBy": { "@type": "Organization", "name": "Meta and PyTorch" }
+        },
+        {
+          "@type": "EducationalOccupationalCredential",
+          "name": "Introduction to Internet of Things",
+          "credentialCategory": "Certificate",
+          "recognizedBy": { "@type": "Organization", "name": "NPTEL" }
+        },
+        {
+          "@type": "EducationalOccupationalCredential",
+          "name": "Diploma in Computer Application",
+          "credentialCategory": "Diploma",
+          "recognizedBy": { "@type": "Organization", "name": "STP Computer Education" }
+        }
+      ],
+      "knowsAbout": [
+        "Artificial Intelligence", "Machine Learning", "Natural Language Processing",
+        "Large Language Models", "Retrieval-Augmented Generation", "PyTorch",
+        "ReactJS", "React Native", "Full-Stack Development",
+        "FastAPI", "RAG Systems", "Prompt Engineering",
+        "Computer Vision", "TypeScript", "Docker"
+      ],
+      "sameAs": [
+        "https://github.com/Baidurjya09",
+        "https://www.linkedin.com/in/baidurjya-bastav-hazarika-059451260/",
+        "https://www.instagram.com/__baidurjya__/",
+        "https://www.kaggle.com/baidurjya09",
+        "https://huggingface.co/baidurjya09"
+      ]
     },
     {
-      "@type": "EducationalOccupationalCredential",
-      "name": "Introduction to Internet of Things",
-      "credentialCategory": "Certificate",
-      "recognizedBy": {
-        "@type": "Organization",
-        "name": "NPTEL"
-      }
+      "@type": "WebSite",
+      "@id": "https://baidurjyabastavhazarika.netlify.app/#website",
+      "name": "Baidurjya Bastav Hazarika",
+      "url": "https://baidurjyabastavhazarika.netlify.app",
+      "description": "Portfolio of Baidurjya Bastav Hazarika, AI/ML Engineer and Full-Stack Developer.",
+      "inLanguage": "en-US",
+      "author": { "@id": "https://baidurjyabastavhazarika.netlify.app/#person" },
+      "publisher": { "@id": "https://baidurjyabastavhazarika.netlify.app/#person" }
     },
     {
-      "@type": "EducationalOccupationalCredential",
-      "name": "Diploma in Computer Application",
-      "credentialCategory": "Diploma",
-      "recognizedBy": {
-        "@type": "Organization",
-        "name": "STP Computer Education"
-      }
-    }
-  ],
-  "knowsAbout": [
-    "Artificial Intelligence",
-    "Machine Learning",
-    "Natural Language Processing",
-    "Large Language Models",
-    "Retrieval-Augmented Generation",
-    "PyTorch",
-    "ReactJS",
-    "React Native",
-    "Full-Stack Development",
-    "FastAPI",
-    "RAG Systems",
-    "Prompt Engineering",
-    "Computer Vision",
-    "TypeScript",
-    "Docker"
-  ],
-  "sameAs": [
-    "https://github.com/Baidurjya09",
-    "https://www.linkedin.com/in/baidurjya-bastav-hazarika-059451260/",
-    "https://www.instagram.com/__baidurjya__/",
-    "https://www.kaggle.com/baidurjya09",
-    "https://huggingface.co/baidurjya09"
-  ]
-}
-</script>
-
-<!-- 2. Website Schema -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  "@id": "https://baidurjyabastavhazarika.netlify.app/#website",
-  "name": "Baidurjya Bastav Hazarika — Portfolio",
-  "url": "https://baidurjyabastavhazarika.netlify.app",
-  "description": "Portfolio of Baidurjya Bastav Hazarika — AI/ML Engineer and Full-Stack Developer. Meta PyTorch Hackathon Finalist.",
-  "inLanguage": "en-US",
-  "author": {
-    "@id": "https://baidurjyabastavhazarika.netlify.app/#person"
-  },
-  "publisher": {
-    "@id": "https://baidurjyabastavhazarika.netlify.app/#person"
-  },
-  "potentialAction": {
-    "@type": "SearchAction",
-    "target": {
-      "@type": "EntryPoint",
-      "urlTemplate": "https://baidurjyabastavhazarika.netlify.app/?q={search_term_string}"
-    },
-    "query-input": "required name=search_term_string"
-  }
-}
-</script>
-
-<!-- 3. WebPage Schema -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebPage",
-  "@id": "https://baidurjyabastavhazarika.netlify.app/#webpage",
-  "url": "https://baidurjyabastavhazarika.netlify.app/",
-  "name": "Baidurjya Bastav Hazarika — AI/ML Engineer and Full-Stack Developer",
-  "description": "BCA student building production-grade AI systems. Meta PyTorch Hackathon Finalist. Frontend Developer at Streak Remote.",
-  "inLanguage": "en-US",
-  "isPartOf": {
-    "@id": "https://baidurjyabastavhazarika.netlify.app/#website"
-  },
-  "about": {
-    "@id": "https://baidurjyabastavhazarika.netlify.app/#person"
-  },
-  "datePublished": "2026-07-01",
-  "dateModified": "2026-08-07"
-}
-</script>
-
-<!-- 4. BreadcrumbList Schema -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    {
-      "@type": "ListItem",
-      "position": 1,
-      "name": "Home",
-      "item": "https://baidurjyabastavhazarika.netlify.app/"
+      "@type": "WebPage",
+      "@id": "https://baidurjyabastavhazarika.netlify.app/#webpage",
+      "url": "https://baidurjyabastavhazarika.netlify.app/",
+      "name": "Baidurjya Bastav Hazarika — AI/ML Engineer and Full-Stack Developer",
+      "description": "BCA student building production-grade AI systems. Meta PyTorch Hackathon Finalist. Frontend Developer at Streak Remote.",
+      "inLanguage": "en-US",
+      "isPartOf": { "@id": "https://baidurjyabastavhazarika.netlify.app/#website" },
+      "about": { "@id": "https://baidurjyabastavhazarika.netlify.app/#person" },
+      "datePublished": "2026-07-01",
+      "dateModified": "2026-08-07"
     },
     {
-      "@type": "ListItem",
-      "position": 2,
-      "name": "About",
-      "item": "https://baidurjyabastavhazarika.netlify.app/about.html"
-    },
-    {
-      "@type": "ListItem",
-      "position": 3,
-      "name": "Projects",
-      "item": "https://baidurjyabastavhazarika.netlify.app/#work"
-    },
-    {
-      "@type": "ListItem",
-      "position": 4,
-      "name": "Contact",
-      "item": "https://baidurjyabastavhazarika.netlify.app/#transmission"
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home",     "item": "https://baidurjyabastavhazarika.netlify.app/" },
+        { "@type": "ListItem", "position": 2, "name": "About",    "item": "https://baidurjyabastavhazarika.netlify.app/about.html" },
+        { "@type": "ListItem", "position": 3, "name": "Projects", "item": "https://baidurjyabastavhazarika.netlify.app/#work" },
+        { "@type": "ListItem", "position": 4, "name": "Contact",  "item": "https://baidurjyabastavhazarika.netlify.app/#transmission" }
+      ]
     }
   ]
 }
