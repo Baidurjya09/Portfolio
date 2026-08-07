@@ -2,8 +2,18 @@
 User-agent: *
 Allow: /
 
+# Disallow dev/test files
+Disallow: /mobile-test.html
+Disallow: /DEPLOYMENT-CHECKLIST.md
+Disallow: /SECURITY.md
+Disallow: /MOBILE-OPTIMIZATION.md
+Disallow: /README-COMPLETE.md
+Disallow: /QUICK-REFERENCE.md
+Disallow: /PERFORMANCE-FIXES.md
+Disallow: /SETUP-SUMMARY.txt
+Disallow: /LIGHTHOUSE-FIXES-APPLIED.md
+Disallow: /DEPLOYMENT-SUCCESS.md
+Disallow: /PRIVACY-SETUP-COMPLETE.md
+
 # Sitemap location
 Sitemap: https://baidurjyabastavhazarika.netlify.app/sitemap.xml
-
-# Crawl-delay for polite bots
-Crawl-delay: 10
