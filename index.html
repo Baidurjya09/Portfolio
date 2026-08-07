@@ -614,8 +614,76 @@ footer a:hover { color: var(--crimson); }
   filter: saturate(1.1) contrast(1.05);
 }
 </style>
+
+/* ===== LOADER ===== */
+<style>
+#loader {
+  position: fixed; inset: 0; z-index: 99999;
+  background: #0a0a0a;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 32px;
+  transition: opacity .6s ease, visibility .6s ease;
+}
+#loader.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.loader-name {
+  font-family: 'Anton', sans-serif;
+  text-transform: uppercase;
+  font-size: clamp(32px, 7vw, 72px);
+  line-height: .9;
+  color: #e8e4d9;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: loaderFadeUp .7s ease .1s forwards;
+}
+.loader-name span { color: #ff2e3e; }
+.loader-bar-wrap {
+  width: clamp(200px, 40vw, 320px);
+  height: 2px;
+  background: rgba(232,228,217,.12);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.loader-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #ff2e3e, #00e5ff);
+  border-radius: 2px;
+  animation: loaderProgress 1.6s cubic-bezier(.4,0,.2,1) .2s forwards;
+}
+.loader-status {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: rgba(232,228,217,.4);
+  opacity: 0;
+  animation: loaderFadeUp .5s ease .3s forwards;
+}
+@keyframes loaderFadeUp {
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes loaderProgress {
+  0%   { width: 0%; }
+  40%  { width: 55%; }
+  70%  { width: 78%; }
+  100% { width: 100%; }
+}
+</style>
 </head>
 <body>
+
+<!-- ===== LOADING SCREEN ===== -->
+<div id="loader">
+  <div class="loader-name">BAIDURJYA<br><span>BASTAV HAZARIKA</span></div>
+  <div class="loader-bar-wrap"><div class="loader-bar"></div></div>
+  <div class="loader-status">Initializing...</div>
+</div>
 
 <!-- Particle canvas background -->
 <canvas id="background-canvas" class="background-canvas"></canvas>
@@ -1195,6 +1263,45 @@ footer a:hover { color: var(--crimson); }
 
 gsap.registerPlugin(ScrollTrigger);
 
+/* ---- LOADER DISMISS ---- */
+(function() {
+  var loader = document.getElementById('loader');
+  var status = loader ? loader.querySelector('.loader-status') : null;
+
+  var messages = ['Initializing...', 'Loading assets...', 'Almost ready...'];
+  var i = 0;
+  var msgInterval = setInterval(function() {
+    i++;
+    if (status && messages[i]) status.textContent = messages[i];
+  }, 500);
+
+  function hideLoader() {
+    clearInterval(msgInterval);
+    if (status) status.textContent = 'Ready.';
+    setTimeout(function() {
+      if (loader) loader.classList.add('hidden');
+      // Animate body content in after loader gone
+      gsap.from('nav', { y: -20, opacity: 0, duration: .5, ease: 'power2.out', delay: .1 });
+      gsap.from('.hero-title .line span', { yPercent: 110, duration: 1.1, stagger: .12, ease: 'expo.out', delay: .2 });
+      gsap.from('.hero-sub',  { opacity: 0, y: 14, duration: .6, delay: .6 });
+      gsap.from('.hero-bio',  { opacity: 0, y: 14, duration: .6, delay: .75 });
+      gsap.from('.hero-cta',  { opacity: 0, y: 14, duration: .6, delay: .9 });
+    }, 300);
+  }
+
+  // Hide when page is fully loaded, minimum 1.8s so animation plays
+  var minTime = Date.now() + 1800;
+  window.addEventListener('load', function() {
+    var remaining = minTime - Date.now();
+    setTimeout(hideLoader, Math.max(remaining, 0));
+  });
+
+  // Fallback — hide after 3.5s no matter what
+  setTimeout(function() {
+    if (loader && !loader.classList.contains('hidden')) hideLoader();
+  }, 3500);
+})();
+
 /* ---- CLOCK ---- */
 function tick() {
   var el = document.getElementById('clock');
@@ -1206,13 +1313,7 @@ function tick() {
 tick();
 setInterval(tick, 1000);
 
-/* ---- HERO TITLE REVEAL ---- */
-gsap.set('.hero-title .line span', { yPercent: 110 });
-gsap.timeline({ delay: 0.2 })
-  .to('.hero-title .line span', { yPercent: 0, duration: 1.1, stagger: 0.12, ease: 'expo.out' })
-  .from('.hero-sub',  { opacity: 0, y: 14, duration: 0.6 }, '-=0.5')
-  .from('.hero-bio',  { opacity: 0, y: 14, duration: 0.6 }, '-=0.4')
-  .from('.hero-cta',  { opacity: 0, y: 14, duration: 0.6 }, '-=0.4');
+/* ---- HERO TITLE REVEAL — handled by loader dismiss above ---- */
 
 /* ---- SCROLL REVEALS ---- */
 document.querySelectorAll('.reveal').forEach(function(el) {
